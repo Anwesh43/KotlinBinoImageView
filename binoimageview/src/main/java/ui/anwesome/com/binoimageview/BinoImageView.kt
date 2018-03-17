@@ -91,4 +91,22 @@ class BinoImageView(ctx : Context, var bitmap : Bitmap) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+    data class Renderer(var view : BinoImageView) {
+        val binoImage : BinoImage = BinoImage(view.bitmap)
+        val animator : Animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            binoImage.draw(canvas, paint)
+            animator.animate {
+                binoImage.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            binoImage.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
