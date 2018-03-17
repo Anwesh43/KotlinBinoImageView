@@ -3,6 +3,7 @@ package ui.anwesome.com.binoimageview
 /**
  * Created by anweshmishra on 17/03/18.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -109,6 +110,13 @@ class BinoImageView(ctx : Context, var bitmap : Bitmap) : View(ctx) {
             binoImage.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity : Activity, bitmap : Bitmap) : BinoImageView {
+            val view = BinoImageView(activity, bitmap)
+            activity.setContentView(view)
+            return view
         }
     }
 }
