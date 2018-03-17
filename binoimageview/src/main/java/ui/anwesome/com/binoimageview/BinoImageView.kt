@@ -31,7 +31,7 @@ class BinoImageView(ctx : Context, var bitmap : Bitmap) : View(ctx) {
                 if (j == scales.size || j == -1) {
                     jDir *= -1
                     j += jDir
-                    scales[j] = prevScale
+                    prevScale = scales[j]
                     dir = 0f
                     stopcb(scales[j])
                 }
@@ -46,6 +46,7 @@ class BinoImageView(ctx : Context, var bitmap : Bitmap) : View(ctx) {
     }
     data class Animator(var view : View, var animated : Boolean = false) {
         fun animate(updatecb : () -> Unit) {
+            updatecb()
             try {
                 Thread.sleep(50)
                 view.invalidate()
