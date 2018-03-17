@@ -6,7 +6,7 @@ package ui.anwesome.com.binoimageview
 import android.view.*
 import android.content.*
 import android.graphics.*
-class BinoImageView(ctx : Context) : View(ctx) {
+class BinoImageView(ctx : Context, var bitmap : Bitmap) : View(ctx) {
     override fun onDraw(canvas : Canvas) {
 
     }
@@ -61,6 +61,34 @@ class BinoImageView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+    data class BinoImage(var bitmap : Bitmap, var time : Int = 0) {
+        val state = State()
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w = canvas.width
+            val h = canvas.height
+            if (time == 0) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true)
+            }
+            val cy = h.toFloat()/2
+            val cr = Math.min(w, h).toFloat()/4
+            val cx = cr
+            for( i in 0 .. 1) {
+                canvas.save()
+                val path = Path()
+                path.addCircle(cx + (2 * cr * state.scales[1]) * i, cy, cr * state.scales[0], Path.Direction.CW)
+                canvas.clipPath(path)
+                canvas.drawBitmap(bitmap, 0f, 0f, paint)
+                canvas.restore()
+            }
+            time++
+        }
+        fun update(stopcb : (Float) -> Unit)  {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
         }
     }
 }
